@@ -8,7 +8,7 @@ export default function ExpensesList({ data }) {
       id: item.id,
       amount: item.amount,
       description: item.description,
-      date: item.date.toLocaleDateString('en-US'),
+      date: item.date,
     };
 
     return <ExpenseItem {...props} />;

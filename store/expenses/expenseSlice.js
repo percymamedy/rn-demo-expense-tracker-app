@@ -17,13 +17,19 @@ export const counterSlice = createSlice({
         expense => expense.id !== action.payload
       );
     },
+    updateExpense: (state, action) => {
+      const index = state.value.findIndex(
+        expense => expense.id === action.payload.id
+      );
+      state.value[index] = action.payload;
+    },
     loadExpenses: (state, action) => {
       state.value = action.payload;
     },
   },
 });
 
-export const { addExpense, removeExpense, loadExpenses } = counterSlice.actions;
+export const { addExpense, removeExpense, updateExpense, loadExpenses } = counterSlice.actions;
 
 const expenses = state => state.expenses.value;
 

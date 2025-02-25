@@ -1,13 +1,15 @@
 import { View, Text, StyleSheet } from 'react-native';
 
-import { colors } from '../../constants/colors';
+import useGlobalStyles from '../../constants/styles';
+
+const { colors } = useGlobalStyles();
 
 export default function ExpenseSummary({ title, amount }) {
   return (
     <View style={styles.container}>
       <View style={styles.innerContainer}>
         <Text style={styles.title}>{title}</Text>
-        <Text style={styles.amount}>${amount}</Text>
+        <Text style={styles.amount}>${amount.toFixed(2)}</Text>
       </View>
     </View>
   );
@@ -19,7 +21,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     borderRadius: 8,
     overflow: 'hidden',
-    backgroundColor: colors['primary-200'],
+    backgroundColor: colors.primary200,
   },
   innerContainer: {
     flexDirection: 'row',
@@ -27,10 +29,10 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 12,
-    color: colors['primary-950'],
+    color: colors.primary950,
   },
   amount: {
-    color: colors['primary-950'],
+    color: colors.primary950,
     fontSize: 14,
     fontWeight: 'bold',
   },

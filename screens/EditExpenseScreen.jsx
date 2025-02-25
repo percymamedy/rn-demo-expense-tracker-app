@@ -6,8 +6,11 @@ import PrimaryButton from '../components/ui/PrimaryButton';
 import TransparentButton from '../components/ui/TransparentButton';
 import IconButton from '../components/ui/IconButton';
 
-import { colors } from '../constants/colors';
-import { removeExpense } from '../store/expenses/expenseSlice';
+import { removeExpense, updateExpense } from '../store/expenses/expenseSlice';
+
+import useGlobalStyles from '../constants/styles';
+
+const { colors } = useGlobalStyles();
 
 export default function EditExpenseScreen({ route, navigation }) {
   const expenseId = route.params.id;
@@ -22,16 +25,28 @@ export default function EditExpenseScreen({ route, navigation }) {
     navigation.goBack();
   }
 
+  function saveUpdatedExpense() {
+    dispatch(
+      updateExpense({
+        id: expenseId,
+        amount: 200.75,
+        description: 'Test updated',
+        date: new Date().toDateString(),
+      })
+    );
+    navigation.goBack();
+  }
+
   return (
     <Container>
       <View style={styles.formContainer}>
         <TransparentButton title="Cancel" onPress={handleCancel} />
-        <PrimaryButton title="Update" onPress={() => {}} />
+        <PrimaryButton title="Update" onPress={saveUpdatedExpense} />
       </View>
       <View style={styles.deleteButtonContainer}>
         <IconButton
           icon="trash"
-          color={colors['red-400']}
+          color={colors.red400}
           size={30}
           onPress={handleDelete}
         />
@@ -50,7 +65,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: 20,
     borderTopWidth: 1,
-    borderTopColor: colors['primary-950'],
+    borderTopColor: colors.primary950,
     paddingTop: 10,
   },
 });

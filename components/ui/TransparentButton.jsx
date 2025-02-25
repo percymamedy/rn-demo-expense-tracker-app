@@ -1,18 +1,19 @@
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 
-import { colors } from '../../constants/colors';
+import useGlobalStyles from '../../constants/styles';
 
-export default function PrimaryButton({ title, onPress }) {
+const { colors } = useGlobalStyles();
+
+export default function TransparentButton({ title, onPress }) {
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
       <Text style={styles.title}>{title}</Text>
     </TouchableOpacity>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors['primary-500'],
+    backgroundColor: colors.primary50,
     paddingHorizontal: 25,
     paddingVertical: 6,
     borderRadius: 4,
@@ -20,7 +21,7 @@ const styles = StyleSheet.create({
     minWidth: 120,
   },
   title: {
-    color: 'white',
+    color: colors.primary950,
     fontSize: 16,
     fontWeight: 'bold',
   },

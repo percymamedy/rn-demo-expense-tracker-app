@@ -1,9 +1,8 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
-import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
-import { View, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -15,46 +14,45 @@ import EditExpenseScreen from '../screens/EditExpenseScreen';
 import AddExpenseScreen from '../screens/AddExpenseScreen';
 import IconButton from './ui/IconButton';
 
-import { colors } from '../constants/colors';
+import useGlobalStyles from '../constants/styles';
 import { loadExpenses } from '../store/expenses/expenseSlice';
 import { EXPENSES } from '../data/dummy-data';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
-function Tabs() {
-  const navigation = useNavigation();
+const { colors } = useGlobalStyles();
 
+function Tabs() {
   return (
     <Tab.Navigator
-      screenOptions={{
+      screenOptions={({ navigation }) => ({
         animation: 'shift',
-        headerTintColor: colors['primary-950'],
+        headerTintColor: 'white',
         headerTitleAlign: 'center',
         headerStyle: {
-          backgroundColor: colors['primary-300'],
+          backgroundColor: colors.primary500,
         },
-        headerRight: () => (
-          <View style={styles.headerButtonContainer}>
-            <IconButton
-              icon="add"
-              color={colors['primary-950']}
-              size={30}
-              onPress={() => {
-                navigation.navigate('AddExpense');
-              }}
-            />
-          </View>
+        headerRight: ({ tintColor }) => (
+          <IconButton
+            icon="add"
+            color={tintColor}
+            size={30}
+            buttonStyles={styles.headerButtonContainer}
+            onPress={() => {
+              navigation.navigate('AddExpense');
+            }}
+          />
         ),
         tabBarStyle: {
-          backgroundColor: colors['primary-300'],
+          backgroundColor: colors.primary500,
         },
-        tabBarActiveTintColor: colors['primary-600'],
-        tabBarInactiveTintColor: colors['primary-950'],
+        tabBarActiveTintColor: colors.accent500,
+        tabBarInactiveTintColor: colors.primary950,
         sceneStyle: {
-          backgroundColor: colors['primary-100'],
+          backgroundColor: colors.primary100,
         },
-      }}
+      })}
     >
       <Tab.Screen
         name="RecentExpenses"
@@ -135,13 +133,13 @@ export default function RootStack() {
       <NavigationContainer style={styles.container}>
         <Stack.Navigator
           screenOptions={{
-            headerTintColor: colors['primary-950'],
+            headerTintColor: 'white',
             headerTitleAlign: 'center',
             headerStyle: {
-              backgroundColor: colors['primary-300'],
+              backgroundColor: colors.primary500,
             },
             contentStyle: {
-              backgroundColor: colors['primary-100'],
+              backgroundColor: colors.primary100,
             },
           }}
         >
