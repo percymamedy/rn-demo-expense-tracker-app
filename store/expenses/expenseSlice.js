@@ -33,6 +33,8 @@ export const { addExpense, removeExpense, updateExpense, loadExpenses } = counte
 
 const expenses = state => state.expenses.value;
 
+export const expenseById = id => createSelector([expenses], expenses => expenses.find(expense => expense.id === id));
+
 export const allExpenses = createSelector([expenses], expenses =>
   expenses
     .map(

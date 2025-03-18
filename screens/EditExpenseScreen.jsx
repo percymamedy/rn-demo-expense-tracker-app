@@ -1,20 +1,23 @@
 import { View, StyleSheet } from 'react-native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Container from '../components/ui/Container';
-import PrimaryButton from '../components/ui/PrimaryButton';
-import TransparentButton from '../components/ui/TransparentButton';
 import IconButton from '../components/ui/IconButton';
 
 import { removeExpense, updateExpense } from '../store/expenses/expenseSlice';
 
 import useGlobalStyles from '../constants/styles';
+import ExpenseForm from '../components/manage-expense/ExpenseForm';
+
+import { expenseById } from '../store/expenses/expenseSlice';
 
 const { colors } = useGlobalStyles();
 
 export default function EditExpenseScreen({ route, navigation }) {
   const expenseId = route.params.id;
   const dispatch = useDispatch();
+
+  const expense = useSelector(expenseById(expenseId));
 
   function handleCancel() {
     navigation.goBack();
@@ -25,13 +28,13 @@ export default function EditExpenseScreen({ route, navigation }) {
     navigation.goBack();
   }
 
-  function saveUpdatedExpense() {
+  function saveUpdatedExpense(expenseData) {
     dispatch(
       updateExpense({
         id: expenseId,
-        amount: 200.75,
-        description: 'Test updated',
-        date: new Date().toDateString(),
+        amount: expenseData.amount,
+        description: expenseData.description,
+        date: expenseData.date,
       })
     );
     navigation.goBack();
@@ -39,10 +42,12 @@ export default function EditExpenseScreen({ route, navigation }) {
 
   return (
     <Container>
-      <View style={styles.formContainer}>
-        <TransparentButton title="Cancel" onPress={handleCancel} />
-        <PrimaryButton title="Update" onPress={saveUpdatedExpense} />
-      </View>
+      <ExpenseForm
+        submitButtonLabel="Update"
+        onCancel={handleCancel}
+        onSave={saveUpdatedExpense}
+        defaultValues={expense}
+      />
       <View style={styles.deleteButtonContainer}>
         <IconButton
           icon="trash"
