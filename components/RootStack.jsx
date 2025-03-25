@@ -13,10 +13,11 @@ import AllExpensesScreen from '../screens/AllExpensesScreen';
 import EditExpenseScreen from '../screens/EditExpenseScreen';
 import AddExpenseScreen from '../screens/AddExpenseScreen';
 import IconButton from './ui/IconButton';
+import ErrorOverlay from './ui/ErrorOverlay';
 
 import useGlobalStyles from '../constants/styles';
 import { loadExpenses } from '../store/expenses/expenseSlice';
-import { EXPENSES } from '../data/dummy-data';
+import { fetchExpenses } from '../utils/http';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -91,18 +92,16 @@ SplashScreen.setOptions({
 
 export default function RootStack() {
   const [appIsReady, setAppIsReady] = useState(false);
+  const [appLoadingError, setAppLoadingError] = useState();
   const dispatch = useDispatch();
 
   useEffect(() => {
     async function prepare() {
       try {
-        // Artificially delay for two seconds to simulate a slow loading
-        // experience. Remove this if you copy and paste the code!
-        await new Promise(resolve => {
-          dispatch(loadExpenses(EXPENSES));
-          return resolve();
-        });
+        const expenses = await fetchExpenses();
+        dispatch(loadExpenses(expenses));
       } catch (e) {
+        setAppLoadingError('Could not load expenses');
         console.warn(e);
       } finally {
         // Tell the application to render
@@ -126,6 +125,14 @@ export default function RootStack() {
 
   if (!appIsReady) {
     return null;
+  }
+
+  if (appLoadingError) {
+    return (
+      <SafeAreaView style={styles.flex1} onLayout={onLayoutRootView}>
+        <ErrorOverlay message={appLoadingError} />
+      </SafeAreaView>
+    );
   }
 
   return (
